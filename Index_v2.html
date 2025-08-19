@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تسجيل الطلبيات — يدعم العربية و PDF</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --accent: #22c55e;
+      --accent-2: #0ea5e9;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 16px; background: var(--bg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Kufi Arabic", "Noto Naskh Arabic", Tahoma, Arial;
+      color: var(--ink);
+    }
+    h1 { text-align: center; margin: 8px 0 16px; }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 6px 24px rgba(15, 23, 42, .06);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .row { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 640px) {
+      .row { grid-template-columns: 1fr 1fr; }
+    }
+    label { font-weight: 600; font-size: 14px; color: var(--muted); }
+    input[type="text"], input[type="number"] {
+      width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 10px; margin-top: 6px;
+      font-size: 15px;
+    }
+    .section-title { margin: 8px 0 10px; font-size: 18px; }
+    .product { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .product input[type="number"] { width: 90px; }
+    .actions { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    @media (min-width: 520px) { .actions { grid-template-columns: 1fr 1fr 1fr; } }
+    button {
+      padding: 12px; border: 0; border-radius: 12px; color: #fff; font-weight: 700; cursor: pointer; font-size: 15px;
+    }
+    .primary { background: var(--accent); }
+    .primary:hover { filter: brightness(0.95); }
+    .ghost { background: var(--accent-2); }
+    .danger { background: #ef4444; }
+
+    /* منطقة الملخص التي سيتم تحويلها إلى صورة ثم PDF */
+    #summary { background: #fff; color: #111827; padding: 16px; border-radius: 12px; width: 100%; }
+    #summary h2 { margin: 0 0 8px; }
+    #summary small { color: #6b7280; }
+    #summary table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    #summary th, #summary td { border: 1px solid #e5e7eb; padding: 8px; text-align: right; }
+    #summary th { background: #f8fafc; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>نموذج تسجيل الطلبية</h1>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <label for="shopName">اسم المحل</label>
+          <input type="text" id="shopName" placeholder="مثال: سوبرماركت الربيع" />
+        </div>
+        <div>
+          <label for="phone">رقم الهاتف</label>
+          <input type="text" id="phone" placeholder="مثال: 0670 000 000" />
+        </div>
+        <div>
+          <label for="location">الموقع (اختياري)</label>
+          <input type="text" id="location" placeholder="الحي / الشارع / بجانب..." />
+        </div>
+        <div>
+          <label for="orderDate">تاريخ الطلبية</label>
+          <input type="text" id="orderDate" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">المنتجات</div>
+
+      <h3 class="section-title">لافصول</h3>
+      <div class="product"><input type="checkbox" data-name="لافصول أبيض"><span>لافصول أبيض</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="لافصول صحراء"><span>لافصول صحراء</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="لافصول أنتي باك"><span>لافصول أنتي باك</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="لافصول أوسيون"><span>لافصول أوسيون</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="لافصول روز"><span>لافصول روز</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="لافصول سيراميك"><span>لافصول سيراميك</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="لافصول ماربر"><span>لافصول ماربر</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="لاف صول جاردين دي فلور"><span>لافصول جاردين دي فلور</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="لافصول برنتون "><span>لافصول برنتون</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="لافصول خزامة "><span>لافصول خزامة</span><input type="number" min="0" placeholder="كمية" /></div>
+
+      <h3 class="section-title">صانيبو 1 لتر</h3>
+      <div class="product"><input type="checkbox" data-name="صانيبو أوسيون"><span>صانيبو أوسيون</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="صانيبو لافوند"><span>صانيبو لافوند</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="صانيبو روز"><span>صانيبو روز</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="صانيبو أخضر"><span>صانيبو أخضر</span><input type="number" min="0" placeholder="كمية" /></div>
+
+      <h3 class="section-title">سودي</h3>
+      <div class="product"><input type="checkbox" data-name="سودي أزرق"><span>سودي أزرق</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="سودي لافوند"><span>سودي لافوند</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="سودي روز"><span>سودي روز</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="جافيل سودي"><span> جافيل سودي</span><input type="number" min="0" placeholder="كمية" /></div>
+
+      <h3 class="section-title">ليكيد فيسال</h3>
+      <div class="product"><input type="checkbox" data-name="ليكيد فيسال 650م برومو"><span>ليكيد فيسال 650م برومو</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="ليكيد فيسال 650 أصفر"><span> ليكيد فيسال 650 أصفر</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="ليكيد فيسال 3 لتر اصفر"><span>ليكيد فيسال 3 لتر اصفر</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="ليكيد فيسال 3 لتر اخضر"><span>ليكيد فيسال 3 لتر اخضر</span><input type="number" min="0" placeholder="كمية" /></div>
+
+      <h3 class="section-title">جافيل</h3>
+      <div class="product"><input type="checkbox" data-name="جافيل 1 لتر"><span>جافيل 1 لتر</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="جافيل 2 لتر"><span>جافيل 2 لتر</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="جافيل 4 لتر"><span>جافيل 4 لتر</span><input type="number" min="0" placeholder="كمية" /></div>
+
+      <h3 class="section-title">جال جافيل</h3>
+      <div class="product"><input type="checkbox" data-name="جال جافيل 1 لتر برومو"><span>جال جافيل 1 لتر برومو</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="جال ماشين فورص 1 لتر"><span>جال ماشين فورص 1 لتر</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="جال جافيل 2 لتر"><span>جال جافيل 2 لتر</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="جال جافيل 4 لتر"><span>جال جافيل 4 لتر</span><input type="number" min="0" placeholder="كمية" /></div>
+
+      <h3 class="section-title">جال ماشين</h3>
+      <div class="product"><input type="checkbox" data-name="جال ماشين برومو"><span>جال ماشين برومو</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="جال ماشين مارساي 1 لتر"><span>جال ماشين مارساي 1 لتر</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="جال ماشين مارساي 2.5 لتر"><span>جال ماشين مارساي 2.5 لتر</span><input type="number" min="0" placeholder="كمية" /></div>
+
+      <h3 class="section-title">لاف فيتر ملتي سيرفاس</h3>
+      <div class="product"><input type="checkbox" data-name="لاف فيتر ملتي سيرفاس"><span>لاف فيتر ملتي سيرفاس</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="لاف فيتر"><span>لاف فيتر</span><input type="number" min="0" placeholder="كمية" /></div>
+
+      <h3 class="section-title">لاف مان</h3>
+      <div class="product"><input type="checkbox" data-name="لاف مان انتي با 500"><span>لاف مان  انتي با 500</span><input type="number" min="0" placeholder="كمية" /></div>
+      <div class="product"><input type="checkbox" data-name="لاف مان مارساي 500"><span>لاف مان مارساي 500</span><input type="number" min="0" placeholder="كمية" /></div>
+    </div>
+
+    <div class="card">
+      <div class="actions">
+        <button id="btnFillDemo" type="button" class="ghost">ملء نموذج تجريبي (اختبار)</button>
+        <button id="btnReset" type="button" class="danger">تفريغ الحقول</button>
+        <button id="btnSave" type="button" class="primary">حفظ الطلبية بصيغة PDF</button>
+      </div>
+    </div>
+
+    <div id="summary" class="card" style="display:none"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" referrerpolicy="no-referrer"></script>
+  <script>
+    // تعبئة تاريخ اليوم تلقائيًا
+    (function initDate(){
+      const d = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      const str = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+      document.getElementById('orderDate').value = str;
+    })();
+
+    // زر الملء التجريبي (Test Case 1)
+    document.getElementById('btnFillDemo').addEventListener('click', () => {
+      document.getElementById('shopName').value = 'سوبرماركت الفجر';
+      document.getElementById('phone').value = '0676995000';
+      document.getElementById('location').value = 'حي النصر، مقابل المسجد';
+
+      // اختر بعض المنتجات مع كميات
+      const rows = document.querySelectorAll('.product');
+      rows.forEach(r => { r.querySelector('input[type="checkbox"]').checked = false; r.querySelector('input[type="number"]').value = ''; });
+      const pick = (label, qty) => {
+        const row = Array.from(rows).find(x => x.querySelector('input[type="checkbox"]').dataset.name === label);
+        if(row){ row.querySelector('input[type="checkbox"]').checked = true; row.querySelector('input[type="number"]').value = qty; }
+      };
+      pick('لافصول أوسيون', 12);
+      pick('ليكيد فيسال 650م برومو', 11);
+      pick('جافيل 2 لتر', 20);
+    });
+
+    // زر التفريغ (Test Case 2)
+    document.getElementById('btnReset').addEventListener('click', () => {
+      ['shopName','phone','location'].forEach(id => document.getElementById(id).value = '');
+      document.querySelectorAll('.product').forEach(p => { 
+        p.querySelector('input[type="checkbox"]').checked = false; 
+        p.querySelector('input[type="number"]').value = ''; 
+      });
+    });
+
+    // **التغيير الجديد:** إضافة هذا الحدث لربط إدخال الكمية مع تحديد الصندوق
+    document.querySelectorAll('.product').forEach(productDiv => {
+      const quantityInput = productDiv.querySelector('input[type="number"]');
+      const checkbox = productDiv.querySelector('input[type="checkbox"]');
+      
+      quantityInput.addEventListener('input', () => {
+        if (quantityInput.value.length > 0 && Number(quantityInput.value) > 0) {
+          checkbox.checked = true;
+        } else {
+          // إذا أفرغ المستخدم حقل الكمية، يتم إلغاء تحديد الصندوق
+          checkbox.checked = false;
+        }
+      });
+    });
+
+    // حفظ PDF — نعتمد html2canvas لالتقاط العربية كصورة، ثم نضيفها لـ jsPDF
+    document.getElementById('btnSave').addEventListener('click', async () => {
+      const shopName = document.getElementById('shopName').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const location = document.getElementById('location').value.trim();
+      const orderDate = document.getElementById('orderDate').value.trim();
+
+      // بناء البيانات المختارة فقط
+      const selected = [];
+      document.querySelectorAll('.product').forEach(p => {
+        const cb = p.querySelector('input[type="checkbox"]');
+        const qty = p.querySelector('input[type="number"]').value.trim();
+        if (cb.checked && qty && Number(qty) > 0) {
+          selected.push({ name: cb.dataset.name, qty: Number(qty) });
+        }
+      });
+
+      // توليد ملخص HTML (سيظهر بالعربية بشكل صحيح لأنه يعرض عبر المتصفح)
+      const summary = document.getElementById('summary');
+      if (selected.length === 0) {
+        summary.innerHTML = '<strong>لم يتم اختيار أي منتجات.</strong>';
+      } else {
+        const rows = selected.map(item => `<tr><td>${item.name}</td><td style="width:120px;text-align:center">${item.qty}</td></tr>`).join('');
+        summary.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+            <div>
+              <h2>طلبية جديدة</h2>
+              <small>${orderDate}</small>
+            </div>
+            <div style="text-align:right">
+              <div><strong>اسم المحل:</strong> ${shopName || '-'}</div>
+              <div><strong>الهاتف:</strong> ${phone || '-'}</div>
+              ${location ? `<div><strong>الموقع:</strong> ${location}</div>` : ''}
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr><th>المنتج</th><th>الكمية</th></tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
+      }
+
+      // إظهار مؤقت أثناء الالتقاط (اختياري)
+      summary.style.display = 'block';
+      await new Promise(r => setTimeout(r)); // انتظار إطار رسم واحد
+
+      // التقاط كصورة باستخدام html2canvas (تعالج العربية بدون مشاكل خطوط)
+      const canvas = await html2canvas(summary, { scale: 2, useCORS: true });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
+
+      // حساب القياسات لتقسيم الصورة على عدة صفحات إذا كانت طويلة
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 10;
+      const imgWidth = pageWidth - margin * 2;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+
+      let heightLeft = imgHeight;
+      let position = margin;
+
+      pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+      heightLeft -= (pageHeight - margin * 2);
+
+      while (heightLeft > 0) {
+        pdf.addPage();
+        position = margin - (imgHeight - heightLeft);
+        pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+        heightLeft -= (pageHeight - margin * 2);
+      }
+
+      const filename = (shopName ? shopName.replace(/\s+/g,'_') : 'طلبية') + '.pdf';
+      pdf.save(filename);
+
+      // إخفاء الملخص مرة أخرى
+      summary.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
