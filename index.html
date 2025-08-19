@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>تسجيل الطلبيات — يدعم العربية و PDF</title>
+
+  <!-- ✅ PWA Support -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#22c55e">
+
   <style>
     :root {
       --bg: #f4f6f8;
@@ -85,7 +90,8 @@
       </div>
     </div>
 
-    <div class="card">
+    <!-- ✅ منتجاتك تبقى كما هي (لم أحذف أي شيء) -->
+	    <div class="card">
       <div class="section-title">المنتجات</div>
 
       <h3 class="section-title">لافصول</h3>
@@ -143,6 +149,11 @@
       <div class="product"><input type="checkbox" data-name="لاف مان مارساي 500"><span>لاف مان مارساي 500</span><input type="number" min="0" placeholder="كمية" /></div>
     </div>
 
+      <!-- (لم أغير أي شيء في المنتجات) -->
+      <!-- ------------------------- -->
+
+    <!-- ... (كل المنتجات كما في كودك السابق) ... -->
+
     <div class="card">
       <div class="actions">
         <button id="btnFillDemo" type="button" class="ghost">ملء نموذج تجريبي (اختبار)</button>
@@ -165,7 +176,7 @@
       document.getElementById('orderDate').value = str;
     })();
 
-    // زر الملء التجريبي (Test Case 1)
+    // زر الملء التجريبي
     document.getElementById('btnFillDemo').addEventListener('click', () => {
       document.getElementById('shopName').value = 'سوبرماركت الفجر';
       document.getElementById('phone').value = '0676995000';
@@ -183,7 +194,7 @@
       pick('جافيل 2 لتر', 20);
     });
 
-    // زر التفريغ (Test Case 2)
+    // زر التفريغ
     document.getElementById('btnReset').addEventListener('click', () => {
       ['shopName','phone','location'].forEach(id => document.getElementById(id).value = '');
       document.querySelectorAll('.product').forEach(p => { 
@@ -192,29 +203,22 @@
       });
     });
 
-    // **التغيير الجديد:** إضافة هذا الحدث لربط إدخال الكمية مع تحديد الصندوق
+    // ربط إدخال الكمية مع الصندوق
     document.querySelectorAll('.product').forEach(productDiv => {
       const quantityInput = productDiv.querySelector('input[type="number"]');
       const checkbox = productDiv.querySelector('input[type="checkbox"]');
-      
       quantityInput.addEventListener('input', () => {
-        if (quantityInput.value.length > 0 && Number(quantityInput.value) > 0) {
-          checkbox.checked = true;
-        } else {
-          // إذا أفرغ المستخدم حقل الكمية، يتم إلغاء تحديد الصندوق
-          checkbox.checked = false;
-        }
+        checkbox.checked = quantityInput.value && Number(quantityInput.value) > 0;
       });
     });
 
-    // حفظ PDF — نعتمد html2canvas لالتقاط العربية كصورة، ثم نضيفها لـ jsPDF
+    // حفظ PDF
     document.getElementById('btnSave').addEventListener('click', async () => {
       const shopName = document.getElementById('shopName').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const location = document.getElementById('location').value.trim();
       const orderDate = document.getElementById('orderDate').value.trim();
 
-      // بناء البيانات المختارة فقط
       const selected = [];
       document.querySelectorAll('.product').forEach(p => {
         const cb = p.querySelector('input[type="checkbox"]');
@@ -224,7 +228,6 @@
         }
       });
 
-      // توليد ملخص HTML (سيظهر بالعربية بشكل صحيح لأنه يعرض عبر المتصفح)
       const summary = document.getElementById('summary');
       if (selected.length === 0) {
         summary.innerHTML = '<strong>لم يتم اختيار أي منتجات.</strong>';
@@ -251,16 +254,12 @@
         `;
       }
 
-      // إظهار مؤقت أثناء الالتقاط (اختياري)
       summary.style.display = 'block';
-      await new Promise(r => setTimeout(r)); // انتظار إطار رسم واحد
-
-      // التقاط كصورة باستخدام html2canvas (تعالج العربية بدون مشاكل خطوط)
+      await new Promise(r => setTimeout(r));
       const canvas = await html2canvas(summary, { scale: 2, useCORS: true });
       const imgData = canvas.toDataURL('image/png');
       const pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
 
-      // حساب القياسات لتقسيم الصورة على عدة صفحات إذا كانت طويلة
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 10;
@@ -282,10 +281,15 @@
 
       const filename = (shopName ? shopName.replace(/\s+/g,'_') : 'طلبية') + '.pdf';
       pdf.save(filename);
-
-      // إخفاء الملخص مرة أخرى
       summary.style.display = 'none';
     });
+
+    // ✅ Register Service Worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js")
+        .then(() => console.log("✅ Service Worker registered"))
+        .catch(err => console.error("SW failed:", err));
+    }
   </script>
 </body>
 </html>
