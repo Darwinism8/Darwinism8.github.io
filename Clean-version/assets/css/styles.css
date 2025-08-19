@@ -1,25 +1,54 @@
+:root {
+  --bg: #f4f6f8;
+  --card: #ffffff;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --accent: #22c55e;
+  --accent-2: #0ea5e9;
+  --radius: 14px;
+}
+* { box-sizing: border-box; }
 body {
-  font-family: "Tajawal", sans-serif;
-  background: #f9fafb;
+  margin: 0; padding: 16px; background: var(--bg);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--ink);
 }
-
+h1 { text-align: center; margin: 8px 0 16px; }
+.wrap { max-width: 860px; margin: 0 auto; }
 .card {
-  border-radius: 1rem;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 24px rgba(15, 23, 42, .06);
+  padding: 16px;
+  margin-bottom: 16px;
 }
+.row { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 640px) {
+  .row { grid-template-columns: 1fr 1fr; }
+}
+label { font-weight: 600; font-size: 14px; color: var(--muted); }
+input[type="text"], input[type="number"], input[type="date"], #search-bar {
+  width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 10px; margin-top: 6px;
+  font-size: 15px;
+}
+.section-title { margin: 8px 0 10px; font-size: 18px; }
+.product { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; margin-bottom: 8px; }
+.product input[type="number"] { width: 90px; }
+.actions { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 520px) { .actions { grid-template-columns: 1fr 1fr 1fr; } }
+button {
+  padding: 12px; border: 0; border-radius: 12px; color: #fff; font-weight: 700; cursor: pointer; font-size: 15px;
+}
+.primary { background: var(--accent); }
+.primary:hover { filter: brightness(0.95); }
+.ghost { background: var(--accent-2); }
+.danger { background: #ef4444; }
+button:disabled { cursor: not-allowed; opacity: 0.7; }
 
-.product-item {
-  border: 1px solid #ddd;
-  border-radius: 0.75rem;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  background: #fff;
-  transition: box-shadow 0.2s ease;
-}
-
-.product-item:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.quantity-input {
-  display: none; /* مخفية مبدئياً */
-}
+/* The summary area to be converted to an image and then a PDF */
+#summary { background: #fff; color: #111827; padding: 16px; border-radius: 12px; width: 100%; }
+#summary h2 { margin: 0 0 8px; }
+#summary small { color: #6b7280; }
+#summary table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+#summary th, #summary td { border: 1px solid #e5e7eb; padding: 8px; text-align: left; }
+#summary th { background: #f8fafc; }
