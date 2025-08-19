@@ -1,0 +1,25 @@
+body {
+  font-family: "Tajawal", sans-serif;
+  background: #f9fafb;
+}
+
+.card {
+  border-radius: 1rem;
+}
+
+.product-item {
+  border: 1px solid #ddd;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: #fff;
+  transition: box-shadow 0.2s ease;
+}
+
+.product-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.quantity-input {
+  display: none; /* مخفية مبدئياً */
+}
