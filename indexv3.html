@@ -51,7 +51,6 @@
     .ghost { background: var(--accent-2); }
     .danger { background: #ef4444; }
 
-    /* منطقة الملخص التي سيتم تحويلها إلى صورة ثم PDF */
     #summary { background: #fff; color: #111827; padding: 16px; border-radius: 12px; width: 100%; }
     #summary h2 { margin: 0 0 8px; }
     #summary small { color: #6b7280; }
@@ -85,13 +84,7 @@
       </div>
     </div>
 
-    <div class="card">
-      <div class="section-title">المنتجات</div>
-
-      <!-- نفس المنتجات ... (مختصر هنا) -->
-      <!-- ------------------------- -->
-	  
-    <div class="card">
+     <div class="card">
       <div class="section-title">المنتجات</div>
 
       <h3 class="section-title">لافصول</h3>
@@ -152,8 +145,6 @@
       <!-- (لم أغير أي شيء في المنتجات) -->
       <!-- ------------------------- -->
 
-    </div>
-
     <div class="card">
       <div class="actions">
         <button id="btnFillDemo" type="button" class="ghost">ملء نموذج تجريبي (اختبار)</button>
@@ -165,10 +156,9 @@
     <div id="summary" class="card" style="display:none"></div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
-    // تعبئة تاريخ اليوم تلقائيًا
     (function initDate(){
       const d = new Date();
       const pad = n => String(n).padStart(2, '0');
@@ -176,14 +166,12 @@
       document.getElementById('orderDate').value = str;
     })();
 
-    // زر الملء التجريبي
     document.getElementById('btnFillDemo').addEventListener('click', () => {
       document.getElementById('shopName').value = 'سوبرماركت الفجر';
       document.getElementById('phone').value = '0676995000';
       document.getElementById('location').value = 'حي النصر، مقابل المسجد';
     });
 
-    // زر التفريغ
     document.getElementById('btnReset').addEventListener('click', () => {
       ['shopName','phone','location'].forEach(id => document.getElementById(id).value = '');
       document.querySelectorAll('.product').forEach(p => { 
@@ -192,20 +180,14 @@
       });
     });
 
-    // ربط الكمية مع الصندوق
     document.querySelectorAll('.product').forEach(productDiv => {
       const quantityInput = productDiv.querySelector('input[type="number"]');
       const checkbox = productDiv.querySelector('input[type="checkbox"]');
       quantityInput.addEventListener('input', () => {
-        if (quantityInput.value.length > 0 && Number(quantityInput.value) > 0) {
-          checkbox.checked = true;
-        } else {
-          checkbox.checked = false;
-        }
+        checkbox.checked = quantityInput.value.length > 0 && Number(quantityInput.value) > 0;
       });
     });
 
-    // حفظ PDF
     document.getElementById('btnSave').addEventListener('click', async () => {
       const shopName = document.getElementById('shopName').value.trim();
       const phone = document.getElementById('phone').value.trim();
@@ -250,29 +232,39 @@
       summary.style.display = 'block';
       await new Promise(r => setTimeout(r));
 
-      // التقاط وتحويل إلى PDF (الإصلاح هنا)
       const canvas = await html2canvas(summary, { scale: 2, useCORS: true });
-      const imgData = canvas.toDataURL('image/png');
       const pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
 
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 10;
-
       const imgWidth = pageWidth - margin * 2;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-      let heightLeft = imgHeight;
-      let position = margin;
+      // تقسيم الكانفس إلى صفحات
+      const pageCanvasHeight = (pageHeight * canvas.width) / pageWidth;
+      const totalPages = Math.ceil(canvas.height / pageCanvasHeight);
 
-      pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
-      heightLeft -= (pageHeight - margin * 2);
+      for (let i = 0; i < totalPages; i++) {
+        let onePageCanvas = document.createElement("canvas");
+        onePageCanvas.width = canvas.width;
+        onePageCanvas.height = pageCanvasHeight;
 
-      while (heightLeft > 0) {
-        pdf.addPage();
-        position = heightLeft - imgHeight + margin; // ✅ التعديل هنا
-        pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
-        heightLeft -= (pageHeight - margin * 2);
+        let ctx = onePageCanvas.getContext("2d");
+        ctx.drawImage(
+          canvas,
+          0,
+          i * pageCanvasHeight,
+          canvas.width,
+          pageCanvasHeight,
+          0,
+          0,
+          canvas.width,
+          pageCanvasHeight
+        );
+
+        let onePageData = onePageCanvas.toDataURL("image/png");
+        if (i > 0) pdf.addPage();
+        pdf.addImage(onePageData, "PNG", margin, margin, imgWidth, pageHeight - margin * 2);
       }
 
       const filename = (shopName ? shopName.replace(/\s+/g,'_') : 'طلبية') + '.pdf';
@@ -283,4 +275,3 @@
   </script>
 </body>
 </html>
-
