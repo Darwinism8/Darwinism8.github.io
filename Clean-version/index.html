@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Order Registration Form - PDF Support</title>
+  <!-- Link to the external stylesheet -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <h1>Order Registration Form</h1>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <label for="shopName">Shop Name</label>
+          <input type="text" id="shopName" placeholder="Example: Spring Supermarket" />
+        </div>
+        <div>
+          <label for="phone">Phone Number</label>
+          <input type="text" id="phone" placeholder="Example: +1 234 567 890" />
+        </div>
+        <div>
+          <label for="location">Location (optional)</label>
+          <input type="text" id="location" placeholder="Neighborhood / Street / Next to..." />
+        </div>
+        <div>
+          <label for="orderDate">Order Date</label>
+          <input type="date" id="orderDate" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">PRODUCTS</div>
+      <input type="text" id="search-bar" placeholder="Search for a product..." />
+      <div id="product-list">
+        <!-- Products will be dynamically generated here by JavaScript -->
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="actions">
+        <button id="btnFillDemo" type="button" class="ghost">Fill Demo Form</button>
+        <button id="btnReset" type="button" class="danger">Reset All Fields</button>
+        <button id="btnSave" type="button" class="primary">Save Order as PDF</button>
+      </div>
+    </div>
+
+    <!-- The summary area to be converted to an image, then a PDF. It will be hidden from the user. -->
+    <div id="summary" class="card" style="display:none"></div>
+  </div>
+
+  <!-- Load libraries and the custom JavaScript file at the end of the body -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" referrerpolicy="no-referrer"></script>
+  <script src="assets/js/script.js"></script>
+</body>
+</html>
